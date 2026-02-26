@@ -2,6 +2,18 @@
 
 This project is a simple grocery list Android app built with **Kotlin**, **Jetpack Compose**, **Room**, **Hilt**, **Kotlin Coroutines + Flow**, and **Clean Architecture (domain / data / presentation)**.
 
+### Screenshots
+
+| Main screen | List with items | Filters & sort |
+|-------------|-----------------|----------------|
+| Add new item card, category chips, status/category/sort filters | Grocery list with checkboxes, category tags, edit & delete | Category filter (e.g. Vegetables) and A→Z sort applied |
+
+<p align="center">
+  <img src="screenshots/screenshot-main.png" width="280" alt="Add New Item and filters" />
+  <img src="screenshots/screenshot-list.png" width="280" alt="Grocery list" />
+  <img src="screenshots/screenshot-filters.png" width="280" alt="Category and sort filters" />
+</p>
+
 ### Features
 
 - **Add items** with a name and category (Milk, Vegetables, Fruits, Breads, Meats).
