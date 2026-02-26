@@ -2,8 +2,8 @@ package com.com.example.domain.usecase
 
 import com.com.example.domain.model.GroceryCategory
 import com.com.example.domain.model.GroceryItem
-import com.com.example.domain.model.ItemSortOption
-import com.com.example.domain.model.ItemStatusFilter
+import com.com.example.domain.model.SortOption
+import com.com.example.domain.model.StatusFilter
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -39,9 +39,9 @@ class FilterAndSortGroceryItemsUseCaseTest {
     fun `status All returns all items sorted by createdAt desc`() {
         val result = useCase(
             items = baseItems,
-            statusFilter = ItemStatusFilter.All,
+            statusFilter = StatusFilter.All,
             categoryFilter = null,
-            sortOption = ItemSortOption.CreatedAt
+            sortOption = SortOption.CreatedAt
         )
 
         assertEquals(listOf(3L, 2L, 1L), result.map { it.id })
@@ -51,9 +51,9 @@ class FilterAndSortGroceryItemsUseCaseTest {
     fun `status Active filters out completed items`() {
         val result = useCase(
             items = baseItems,
-            statusFilter = ItemStatusFilter.Active,
+            statusFilter = StatusFilter.Active,
             categoryFilter = null,
-            sortOption = ItemSortOption.CreatedAt
+            sortOption = SortOption.CreatedAt
         )
 
         // Only items 1 and 3 are active, sorted by createdAt desc
@@ -64,9 +64,9 @@ class FilterAndSortGroceryItemsUseCaseTest {
     fun `status Completed returns only completed items`() {
         val result = useCase(
             items = baseItems,
-            statusFilter = ItemStatusFilter.Completed,
+            statusFilter = StatusFilter.Completed,
             categoryFilter = null,
-            sortOption = ItemSortOption.CreatedAt
+            sortOption = SortOption.CreatedAt
         )
 
         assertEquals(listOf(2L), result.map { it.id })
@@ -76,9 +76,9 @@ class FilterAndSortGroceryItemsUseCaseTest {
     fun `category filter narrows items to given category`() {
         val result = useCase(
             items = baseItems,
-            statusFilter = ItemStatusFilter.All,
+            statusFilter = StatusFilter.All,
             categoryFilter = GroceryCategory.Fruits,
-            sortOption = ItemSortOption.CreatedAt
+            sortOption = SortOption.CreatedAt
         )
 
         // Only fruit items 1 and 2, sorted by createdAt desc
@@ -89,9 +89,9 @@ class FilterAndSortGroceryItemsUseCaseTest {
     fun `alphabetical sort orders items by name case insensitive`() {
         val result = useCase(
             items = baseItems,
-            statusFilter = ItemStatusFilter.All,
+            statusFilter = StatusFilter.All,
             categoryFilter = null,
-            sortOption = ItemSortOption.Alphabetical
+            sortOption = SortOption.Alphabetical
         )
 
         assertEquals(listOf("Apples", "Bananas", "Milk"), result.map { it.name })
@@ -109,9 +109,9 @@ class FilterAndSortGroceryItemsUseCaseTest {
 
         val result = useCase(
             items = items,
-            statusFilter = ItemStatusFilter.Active,
+            statusFilter = StatusFilter.Active,
             categoryFilter = GroceryCategory.Fruits,
-            sortOption = ItemSortOption.CreatedAt
+            sortOption = SortOption.CreatedAt
         )
 
         // Active fruits are items 1 and 4, sorted by createdAt desc

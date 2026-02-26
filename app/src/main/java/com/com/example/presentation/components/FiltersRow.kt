@@ -13,8 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.com.example.domain.model.GroceryCategory
-import com.com.example.presentation.model.SortOption
-import com.com.example.presentation.model.StatusFilter
+import com.com.example.domain.model.SortOption
+import com.com.example.domain.model.StatusFilter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,9 +1,9 @@
 package com.com.example.presentation.viewstate
 
 import com.com.example.domain.model.GroceryCategory
+import com.com.example.domain.model.SortOption
+import com.com.example.domain.model.StatusFilter
 import com.com.example.presentation.model.GroceryItemUiModel
-import com.com.example.presentation.model.SortOption
-import com.com.example.presentation.model.StatusFilter
 
 data class GroceryUiState(
     val items: List<GroceryItemUiModel> = emptyList(),

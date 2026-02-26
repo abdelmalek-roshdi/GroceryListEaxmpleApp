@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.com.example.domain.model.AddItemResult
 import com.com.example.domain.model.GroceryCategory
 import com.com.example.domain.model.GroceryItem
-import com.com.example.domain.model.ItemSortOption
-import com.com.example.domain.model.ItemStatusFilter
+import com.com.example.domain.model.SortOption
+import com.com.example.domain.model.StatusFilter
 import com.com.example.domain.usecase.AddGroceryItemUseCase
 import com.com.example.domain.usecase.DeleteGroceryItemUseCase
 import com.com.example.domain.usecase.FilterAndSortGroceryItemsUseCase
@@ -14,8 +14,6 @@ import com.com.example.domain.usecase.GetGroceryItemsUseCase
 import com.com.example.domain.usecase.ToggleCompletedUseCase
 import com.com.example.domain.usecase.UpdateGroceryItemUseCase
 import com.com.example.presentation.model.GroceryItemUiModel
-import com.com.example.presentation.model.SortOption
-import com.com.example.presentation.model.StatusFilter
 import com.com.example.presentation.viewstate.GroceryUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -68,9 +66,9 @@ class GroceryListViewModel @Inject constructor(
             ) { items, state ->
                 val filteredAndSorted = filterAndSortItems(
                     items = items,
-                    statusFilter = state.statusFilter.toDomainStatus(),
+                    statusFilter = state.statusFilter,
                     categoryFilter = state.categoryFilter,
-                    sortOption = state.sortOption.toDomainSort()
+                    sortOption = state.sortOption
                 )
 
                 Pair(
@@ -206,18 +204,5 @@ class GroceryListViewModel @Inject constructor(
             isCompleted = isCompleted,
             createdAt = createdAt
         )
-
-    private fun StatusFilter.toDomainStatus(): ItemStatusFilter =
-        when (this) {
-            StatusFilter.All -> ItemStatusFilter.All
-            StatusFilter.Active -> ItemStatusFilter.Active
-            StatusFilter.Completed -> ItemStatusFilter.Completed
-        }
-
-    private fun SortOption.toDomainSort(): ItemSortOption =
-        when (this) {
-            SortOption.CreatedAt -> ItemSortOption.CreatedAt
-            SortOption.Alphabetical -> ItemSortOption.Alphabetical
-        }
 }
 

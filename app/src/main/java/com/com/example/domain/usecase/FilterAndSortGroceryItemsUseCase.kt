@@ -2,23 +2,23 @@ package com.com.example.domain.usecase
 
 import com.com.example.domain.model.GroceryCategory
 import com.com.example.domain.model.GroceryItem
-import com.com.example.domain.model.ItemSortOption
-import com.com.example.domain.model.ItemStatusFilter
+import com.com.example.domain.model.SortOption
+import com.com.example.domain.model.StatusFilter
 import javax.inject.Inject
 
 class FilterAndSortGroceryItemsUseCase @Inject constructor() {
 
     operator fun invoke(
         items: List<GroceryItem>,
-        statusFilter: ItemStatusFilter,
+        statusFilter: StatusFilter,
         categoryFilter: GroceryCategory?,
-        sortOption: ItemSortOption
+        sortOption: SortOption
     ): List<GroceryItem> {
         var filtered = items
         when (statusFilter) {
-            ItemStatusFilter.All -> Unit
-            ItemStatusFilter.Active -> filtered = filtered.filter { !it.isCompleted }
-            ItemStatusFilter.Completed -> filtered = filtered.filter { it.isCompleted }
+            StatusFilter.All -> Unit
+            StatusFilter.Active -> filtered = filtered.filter { !it.isCompleted }
+            StatusFilter.Completed -> filtered = filtered.filter { it.isCompleted }
         }
 
         categoryFilter?.let { category ->
@@ -26,8 +26,8 @@ class FilterAndSortGroceryItemsUseCase @Inject constructor() {
         }
 
         val sorted = when (sortOption) {
-            ItemSortOption.CreatedAt -> filtered.sortedByDescending { it.createdAt }
-            ItemSortOption.Alphabetical -> filtered.sortedBy { it.name.lowercase() }
+            SortOption.CreatedAt -> filtered.sortedByDescending { it.createdAt }
+            SortOption.Alphabetical -> filtered.sortedBy { it.name.lowercase() }
         }
 
         return sorted

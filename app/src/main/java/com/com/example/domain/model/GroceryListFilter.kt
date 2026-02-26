@@ -1,10 +1,10 @@
 package com.com.example.domain.model
 
-enum class ItemStatusFilter {
+enum class StatusFilter {
     All, Active, Completed
 }
 
-enum class ItemSortOption {
+enum class SortOption {
     CreatedAt,
     Alphabetical
 }

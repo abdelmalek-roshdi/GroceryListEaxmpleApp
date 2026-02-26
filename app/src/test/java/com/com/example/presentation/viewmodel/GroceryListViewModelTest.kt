@@ -4,14 +4,14 @@ import app.cash.turbine.test
 import com.com.example.domain.model.AddItemResult
 import com.com.example.domain.model.GroceryCategory
 import com.com.example.domain.model.GroceryItem
+import com.com.example.domain.model.SortOption
+import com.com.example.domain.model.StatusFilter
 import com.com.example.domain.usecase.AddGroceryItemUseCase
 import com.com.example.domain.usecase.DeleteGroceryItemUseCase
 import com.com.example.domain.usecase.FilterAndSortGroceryItemsUseCase
 import com.com.example.domain.usecase.GetGroceryItemsUseCase
 import com.com.example.domain.usecase.ToggleCompletedUseCase
 import com.com.example.domain.usecase.UpdateGroceryItemUseCase
-import com.com.example.presentation.model.SortOption
-import com.com.example.presentation.model.StatusFilter
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
