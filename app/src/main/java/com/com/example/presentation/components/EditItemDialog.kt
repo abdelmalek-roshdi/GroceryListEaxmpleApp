@@ -14,10 +14,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.com.example.domain.model.GroceryCategory
@@ -25,13 +21,13 @@ import com.com.example.presentation.model.GroceryItemUiModel
 
 @Composable
 fun EditItemDialog(
-    item: GroceryItemUiModel,
+    name: String,
+    selectedCategory: GroceryCategory,
+    onNameChanged: (String) -> Unit,
+    onCategorySelected: (GroceryCategory) -> Unit,
     onDismiss: () -> Unit,
-    onConfirm: (String, GroceryCategory) -> Unit
+    onConfirm: () -> Unit
 ) {
-    var name by remember { mutableStateOf(item.name) }
-    var category by remember { mutableStateOf(item.category) }
-
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Edit Item") },
@@ -39,7 +35,7 @@ fun EditItemDialog(
             Column {
                 OutlinedTextField(
                     value = name,
-                    onValueChange = { name = it },
+                    onValueChange = onNameChanged,
                     label = { Text("Item name") },
                     singleLine = true
                 )
@@ -58,15 +54,15 @@ fun EditItemDialog(
                     GroceryCategory.values().forEach { cat ->
                         CategoryChip(
                             category = cat,
-                            selected = cat == category,
-                            onClick = { category = cat }
+                            selected = cat == selectedCategory,
+                            onClick = { onCategorySelected(cat) }
                         )
                     }
                 }
             }
         },
         confirmButton = {
-            TextButton(onClick = { onConfirm(name, category) }) {
+            TextButton(onClick = onConfirm) {
                 Text("Save")
             }
         },

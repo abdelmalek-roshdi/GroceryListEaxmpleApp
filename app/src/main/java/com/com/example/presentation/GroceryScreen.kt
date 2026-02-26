@@ -85,10 +85,13 @@ fun GroceryScreen(
 
     state.editingItem?.let { editing ->
         EditItemDialog(
-            item = editing,
+            name = state.nameInput,
+            selectedCategory = state.selectedCategory,
+            onNameChanged = { onEvent(GroceryEvent.NameChanged(it)) },
+            onCategorySelected = { onEvent(GroceryEvent.CategorySelected(it)) },
             onDismiss = { onEvent(GroceryEvent.EditDismissed) },
-            onConfirm = { name, category ->
-                onEvent(GroceryEvent.EditConfirmed(name, category))
+            onConfirm = {
+                onEvent(GroceryEvent.EditConfirmed(state.nameInput, state.selectedCategory))
             }
         )
     }
