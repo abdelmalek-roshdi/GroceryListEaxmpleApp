@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -117,19 +118,23 @@ fun CategoryChip(
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    val background = when (category) {
-        GroceryCategory.Milk -> Color(0xFFE3F2FD)
-        GroceryCategory.Vegetables -> Color(0xFFE8F5E9)
-        GroceryCategory.Fruits -> Color(0xFFFFF3E0)
-        GroceryCategory.Breads -> Color(0xFFFFF8E1)
-        GroceryCategory.Meats -> Color(0xFFFFEBEE)
+    val background = remember {
+        when (category) {
+            GroceryCategory.Milk -> Color(0xFFE3F2FD)
+            GroceryCategory.Vegetables -> Color(0xFFE8F5E9)
+            GroceryCategory.Fruits -> Color(0xFFFFF3E0)
+            GroceryCategory.Breads -> Color(0xFFFFF8E1)
+            GroceryCategory.Meats -> Color(0xFFFFEBEE)
+        }
     }
-    val accent = when (category) {
-        GroceryCategory.Milk -> Color(0xFF2196F3)
-        GroceryCategory.Vegetables -> Color(0xFF4CAF50)
-        GroceryCategory.Fruits -> Color(0xFFFF9800)
-        GroceryCategory.Breads -> Color(0xFFFFC107)
-        GroceryCategory.Meats -> Color(0xFFF44336)
+    val accent = remember {
+        when (category) {
+            GroceryCategory.Milk -> Color(0xFF2196F3)
+            GroceryCategory.Vegetables -> Color(0xFF4CAF50)
+            GroceryCategory.Fruits -> Color(0xFFFF9800)
+            GroceryCategory.Breads -> Color(0xFFFFC107)
+            GroceryCategory.Meats -> Color(0xFFF44336)
+        }
     }
 
     Column(
