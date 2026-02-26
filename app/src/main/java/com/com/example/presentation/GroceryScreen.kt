@@ -71,7 +71,8 @@ fun GroceryScreen(
                 EmptyState()
             } else {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize()
+                        .padding(bottom = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(state.items, key = { it.id }) { item ->

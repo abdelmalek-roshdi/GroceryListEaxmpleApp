@@ -33,7 +33,7 @@ class GroceryListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(GroceryUiState(isLoading = true))
     val uiState: StateFlow<GroceryUiState> = _uiState
 
-    private var latestItems: List<GroceryItem> = emptyList()
+    private val _latestItems = MutableStateFlow<List<GroceryItem>>(emptyList())
 
     init {
         observeItems()
@@ -42,7 +42,7 @@ class GroceryListViewModel @Inject constructor(
     private fun observeItems() {
         viewModelScope.launch {
             getItems().collect { items ->
-                latestItems = items
+                _latestItems.value = items
                 _uiState.update { state ->
                     state.copy(
                         isLoading = false,
@@ -64,21 +64,21 @@ class GroceryListViewModel @Inject constructor(
     fun onStatusFilterSelected(filter: StatusFilter) {
         _uiState.update { state ->
             val newState = state.copy(statusFilter = filter)
-            newState.copy(items = applyFiltersAndSort(latestItems, newState))
+            newState.copy(items = applyFiltersAndSort(_latestItems.value, newState))
         }
     }
 
     fun onCategoryFilterSelected(category: GroceryCategory?) {
         _uiState.update { state ->
             val newState = state.copy(categoryFilter = category)
-            newState.copy(items = applyFiltersAndSort(latestItems, newState))
+            newState.copy(items = applyFiltersAndSort(_latestItems.value, newState))
         }
     }
 
     fun onSortOptionSelected(option: SortOption) {
         _uiState.update { state ->
             val newState = state.copy(sortOption = option)
-            newState.copy(items = applyFiltersAndSort(latestItems, newState))
+            newState.copy(items = applyFiltersAndSort(_latestItems.value, newState))
         }
     }
 
@@ -107,21 +107,23 @@ class GroceryListViewModel @Inject constructor(
     }
 
     fun onToggleCompletedClicked(itemId: Long) {
-        val item = latestItems.find { it.id == itemId } ?: return
+        val item = _latestItems.value.find { it.id == itemId } ?: return
         viewModelScope.launch {
-            toggleCompleted(item)
+            val result = toggleCompleted(item)
+            showSnackbarForResult(result)
         }
     }
 
     fun onDeleteItemClicked(itemId: Long) {
-        val item = latestItems.find { it.id == itemId } ?: return
+        val item = _latestItems.value.find { it.id == itemId } ?: return
         viewModelScope.launch {
-            deleteItem(item)
+            val result = deleteItem(item)
+            showSnackbarForResult(result, "delete")
         }
     }
 
     fun onEditItemRequested(itemId: Long) {
-        val item = latestItems.find { it.id == itemId } ?: return
+        val item = _latestItems.value.find { it.id == itemId } ?: return
         _uiState.update { state ->
             state.copy(
                 editingItem = item.toUi(),
@@ -146,16 +148,20 @@ class GroceryListViewModel @Inject constructor(
                 createdAt = editing.createdAt
             )
             val result = updateItem(domainItem)
-            _uiState.update {
-                if (result.isSuccess) {
-                    it.copy(
-                        editingItem = null,
-                        nameInput = "",
-                        snackbarMessage = "Item updated"
-                    )
-                } else {
-                    it.copy(snackbarMessage = "Could not update item")
-                }
+            showSnackbarForResult(result)
+        }
+    }
+
+    private fun showSnackbarForResult(result: Result<Unit>, text: String? = null) {
+        _uiState.update { state ->
+            if (result.isSuccess) {
+                state.copy(
+                    editingItem = null,
+                    nameInput = "",
+                    snackbarMessage = text?.let { "item ".plus(it.plus("d")) } ?: "Item updated"
+                )
+            } else {
+                state.copy(snackbarMessage = "Could not".plus(text ?: "update").plus(" item"))
             }
         }
     }

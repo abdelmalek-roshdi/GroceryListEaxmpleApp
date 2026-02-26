@@ -334,14 +334,17 @@ class GroceryListViewModelTest {
             toggleCompleted = toggleUseCase
         )
 
-        // drain initial emissions so ViewModel has collected items
+        // drain initial emissions so ViewModel has collected items and latestItems stateIn is updated
         viewModel.uiState.test {
             awaitItem()
             awaitItem()
+            advanceUntilIdle()
 
             // When: user toggles completion for that item
             viewModel.onToggleCompletedClicked(item.id)
             advanceUntilIdle()
+            // consume snackbar emission so Turbine does not see unconsumed events
+            awaitItem()
         }
 
         // Then: the ToggleCompleted use case is called with that item
