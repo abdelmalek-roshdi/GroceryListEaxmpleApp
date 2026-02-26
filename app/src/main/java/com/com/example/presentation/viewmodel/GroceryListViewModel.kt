@@ -17,6 +17,7 @@ import com.com.example.presentation.viewstate.GroceryUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -36,18 +37,21 @@ class GroceryListViewModel @Inject constructor(
     private val _latestItems = MutableStateFlow<List<GroceryItem>>(emptyList())
 
     init {
-        observeItems()
+        observeItemsAndFilterState()
     }
 
-    private fun observeItems() {
+    private fun observeItemsAndFilterState() {
         viewModelScope.launch {
-            getItems().collect { items ->
+            combine(
+                getItems(),
+                _uiState
+            ) { items, state ->
+                Pair(items, state.copy(isLoading = false, items = applyFiltersAndSort(items, state)))
+            }.collect { (items, newState) ->
                 _latestItems.value = items
-                _uiState.update { state ->
-                    state.copy(
-                        isLoading = false,
-                        items = applyFiltersAndSort(items, state)
-                    )
+                val current = _uiState.value
+                if (newState.items != current.items || newState.isLoading != current.isLoading) {
+                    _uiState.value = newState
                 }
             }
         }
@@ -62,24 +66,15 @@ class GroceryListViewModel @Inject constructor(
     }
 
     fun onStatusFilterSelected(filter: StatusFilter) {
-        _uiState.update { state ->
-            val newState = state.copy(statusFilter = filter)
-            newState.copy(items = applyFiltersAndSort(_latestItems.value, newState))
-        }
+        _uiState.update { it.copy(statusFilter = filter) }
     }
 
     fun onCategoryFilterSelected(category: GroceryCategory?) {
-        _uiState.update { state ->
-            val newState = state.copy(categoryFilter = category)
-            newState.copy(items = applyFiltersAndSort(_latestItems.value, newState))
-        }
+        _uiState.update { it.copy(categoryFilter = category) }
     }
 
     fun onSortOptionSelected(option: SortOption) {
-        _uiState.update { state ->
-            val newState = state.copy(sortOption = option)
-            newState.copy(items = applyFiltersAndSort(_latestItems.value, newState))
-        }
+        _uiState.update { it.copy(sortOption = option) }
     }
 
     fun onAddItemClicked() {

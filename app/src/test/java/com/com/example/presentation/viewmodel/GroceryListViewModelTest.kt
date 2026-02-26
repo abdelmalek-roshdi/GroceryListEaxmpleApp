@@ -203,7 +203,8 @@ class GroceryListViewModelTest {
 
             // When: user selects the Completed status filter
             viewModel.onStatusFilterSelected(StatusFilter.Completed)
-
+            advanceUntilIdle()
+            awaitItem() // consume filter-only update; combine will emit filtered list next
             // Then: only completed items are visible
             val completedState = awaitItem()
             Assert.assertEquals(listOf("Milk"), completedState.items.map { it.name })
@@ -241,6 +242,8 @@ class GroceryListViewModelTest {
 
             // When: user filters by the Fruits category
             viewModel.onCategoryFilterSelected(GroceryCategory.Fruits)
+            advanceUntilIdle()
+            awaitItem() // consume filter-only update; combine will emit filtered list next
             val fruitsState = awaitItem()
             // Default sort is by createdAt desc: Apples (3) then Bananas (2)
             // Then: only fruit items are shown in newest-first order
