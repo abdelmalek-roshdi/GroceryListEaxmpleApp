@@ -15,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.com.example.presentation.viewmodel.GroceryEvent
 import com.com.example.presentation.viewmodel.GroceryListViewModel
 import com.com.example.presentation.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,17 +54,7 @@ fun GroceryApp(viewModel: GroceryListViewModel = hiltViewModel()) {
             GroceryScreen(
                 state = state,
                 paddingValues = paddingValues,
-                onNameChanged = viewModel::onNameChanged,
-                onCategorySelected = viewModel::onCategorySelected,
-                onAddItemClicked = viewModel::onAddItemClicked,
-                onStatusFilterSelected = viewModel::onStatusFilterSelected,
-                onCategoryFilterSelected = viewModel::onCategoryFilterSelected,
-                onSortOptionSelected = viewModel::onSortOptionSelected,
-                onToggleCompletedClicked = viewModel::onToggleCompletedClicked,
-                onDeleteItemClicked = viewModel::onDeleteItemClicked,
-                onEditItemRequested = viewModel::onEditItemRequested,
-                onEditDismissed = viewModel::onEditDismissed,
-                onEditConfirmed = viewModel::onEditConfirmed
+                onEvent = viewModel::onEvent
             )
         }
     }

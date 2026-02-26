@@ -14,31 +14,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.com.example.domain.model.GroceryCategory
 import com.com.example.presentation.components.AddItemCard
 import com.com.example.presentation.components.EditItemDialog
 import com.com.example.presentation.components.EmptyState
 import com.com.example.presentation.components.FiltersRow
 import com.com.example.presentation.components.GroceryListItem
-import com.com.example.presentation.model.SortOption
-import com.com.example.presentation.model.StatusFilter
 import com.com.example.presentation.viewstate.GroceryUiState
+import com.com.example.presentation.viewmodel.GroceryEvent
 
 @Composable
 fun GroceryScreen(
     state: GroceryUiState,
     paddingValues: PaddingValues,
-    onNameChanged: (String) -> Unit,
-    onCategorySelected: (GroceryCategory) -> Unit,
-    onAddItemClicked: () -> Unit,
-    onStatusFilterSelected: (StatusFilter) -> Unit,
-    onCategoryFilterSelected: (GroceryCategory?) -> Unit,
-    onSortOptionSelected: (SortOption) -> Unit,
-    onToggleCompletedClicked: (Long) -> Unit,
-    onDeleteItemClicked: (Long) -> Unit,
-    onEditItemRequested: (Long) -> Unit,
-    onEditDismissed: () -> Unit,
-    onEditConfirmed: (String, GroceryCategory) -> Unit
+    onEvent: (GroceryEvent) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -53,9 +41,9 @@ fun GroceryScreen(
             AddItemCard(
                 nameInput = state.nameInput,
                 selectedCategory = state.selectedCategory,
-                onNameChanged = onNameChanged,
-                onCategorySelected = onCategorySelected,
-                onAddItemClicked = onAddItemClicked
+                onNameChanged = { onEvent(GroceryEvent.NameChanged(it)) },
+                onCategorySelected = { onEvent(GroceryEvent.CategorySelected(it)) },
+                onAddItemClicked = { onEvent(GroceryEvent.AddItemClicked) }
             )
 
             Spacer(Modifier.height(8.dp))
@@ -64,9 +52,9 @@ fun GroceryScreen(
                 statusFilter = state.statusFilter,
                 categoryFilter = state.categoryFilter,
                 sortOption = state.sortOption,
-                onStatusFilterSelected = onStatusFilterSelected,
-                onCategoryFilterSelected = onCategoryFilterSelected,
-                onSortOptionSelected = onSortOptionSelected
+                onStatusFilterSelected = { onEvent(GroceryEvent.StatusFilterSelected(it)) },
+                onCategoryFilterSelected = { onEvent(GroceryEvent.CategoryFilterSelected(it)) },
+                onSortOptionSelected = { onEvent(GroceryEvent.SortOptionSelected(it)) }
             )
 
             if (state.items.isEmpty()) {
@@ -85,9 +73,9 @@ fun GroceryScreen(
                     items(state.items, key = { it.id }) { item ->
                         GroceryListItem(
                             item = item,
-                            onToggleCompleted = { onToggleCompletedClicked(item.id) },
-                            onDelete = { onDeleteItemClicked(item.id) },
-                            onEdit = { onEditItemRequested(item.id) }
+                            onToggleCompleted = { onEvent(GroceryEvent.ToggleCompletedClicked(item.id)) },
+                            onDelete = { onEvent(GroceryEvent.DeleteItemClicked(item.id)) },
+                            onEdit = { onEvent(GroceryEvent.EditItemRequested(item.id)) }
                         )
                     }
                 }
@@ -98,8 +86,10 @@ fun GroceryScreen(
     state.editingItem?.let { editing ->
         EditItemDialog(
             item = editing,
-            onDismiss = onEditDismissed,
-            onConfirm = onEditConfirmed
+            onDismiss = { onEvent(GroceryEvent.EditDismissed) },
+            onConfirm = { name, category ->
+                onEvent(GroceryEvent.EditConfirmed(name, category))
+            }
         )
     }
 }

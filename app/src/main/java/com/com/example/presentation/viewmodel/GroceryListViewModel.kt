@@ -40,6 +40,22 @@ class GroceryListViewModel @Inject constructor(
         observeItemsAndFilterState()
     }
 
+    fun onEvent(event: GroceryEvent) {
+        when (event) {
+            is GroceryEvent.NameChanged -> onNameChanged(event.value)
+            is GroceryEvent.CategorySelected -> onCategorySelected(event.category)
+            is GroceryEvent.StatusFilterSelected -> onStatusFilterSelected(event.filter)
+            is GroceryEvent.CategoryFilterSelected -> onCategoryFilterSelected(event.category)
+            is GroceryEvent.SortOptionSelected -> onSortOptionSelected(event.option)
+            GroceryEvent.AddItemClicked -> onAddItemClicked()
+            is GroceryEvent.ToggleCompletedClicked -> onToggleCompletedClicked(event.itemId)
+            is GroceryEvent.DeleteItemClicked -> onDeleteItemClicked(event.itemId)
+            is GroceryEvent.EditItemRequested -> onEditItemRequested(event.itemId)
+            GroceryEvent.EditDismissed -> onEditDismissed()
+            is GroceryEvent.EditConfirmed -> onEditConfirmed(event.name, event.category)
+        }
+    }
+
     private fun observeItemsAndFilterState() {
         viewModelScope.launch {
             combine(
