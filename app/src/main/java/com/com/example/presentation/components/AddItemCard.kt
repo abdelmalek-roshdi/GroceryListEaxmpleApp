@@ -27,8 +27,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.com.example.domain.model.GroceryCategory
+import com.com.example.presentation.theme.AppTheme
 
 @Composable
 fun AddItemCard(
@@ -112,6 +114,34 @@ fun AddItemCard(
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun AddItemCardPreview() {
+    AppTheme {
+        AddItemCard(
+            nameInput = "",
+            selectedCategory = GroceryCategory.Milk,
+            onNameChanged = {},
+            onCategorySelected = {},
+            onAddItemClicked = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AddItemCardWithInputPreview() {
+    AppTheme {
+        AddItemCard(
+            nameInput = "Bananas",
+            selectedCategory = GroceryCategory.Fruits,
+            onNameChanged = {},
+            onCategorySelected = {},
+            onAddItemClicked = {}
+        )
+    }
+}
+
 @Composable
 fun CategoryChip(
     category: GroceryCategory,
@@ -167,3 +197,26 @@ fun CategoryChip(
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun CategoryChipSelectedPreview() {
+    AppTheme {
+        CategoryChip(
+            category = GroceryCategory.Milk,
+            selected = true,
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CategoryChipUnselectedPreview() {
+    AppTheme {
+        CategoryChip(
+            category = GroceryCategory.Fruits,
+            selected = false,
+            onClick = {}
+        )
+    }
+}

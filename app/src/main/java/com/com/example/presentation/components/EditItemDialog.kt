@@ -15,9 +15,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.com.example.domain.model.GroceryCategory
-import com.com.example.presentation.model.GroceryItemUiModel
+import com.com.example.presentation.theme.AppTheme
 
 @Composable
 fun EditItemDialog(
@@ -74,3 +75,17 @@ fun EditItemDialog(
     )
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun EditItemDialogPreview() {
+    AppTheme {
+        EditItemDialog(
+            name = "Milk",
+            selectedCategory = GroceryCategory.Milk,
+            onNameChanged = {},
+            onCategorySelected = {},
+            onDismiss = {},
+            onConfirm = {}
+        )
+    }
+}

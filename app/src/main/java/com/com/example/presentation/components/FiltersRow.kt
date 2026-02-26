@@ -11,10 +11,12 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.com.example.domain.model.GroceryCategory
 import com.com.example.domain.model.SortOption
 import com.com.example.domain.model.StatusFilter
+import com.com.example.presentation.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,3 +86,17 @@ fun FiltersRow(
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun FiltersRowPreview() {
+    AppTheme {
+        FiltersRow(
+            statusFilter = StatusFilter.Active,
+            categoryFilter = null,
+            sortOption = SortOption.CreatedAt,
+            onStatusFilterSelected = {},
+            onCategoryFilterSelected = {},
+            onSortOptionSelected = {}
+        )
+    }
+}

@@ -26,8 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.com.example.domain.model.GroceryCategory
 import com.com.example.presentation.model.GroceryItemUiModel
+import com.com.example.presentation.theme.AppTheme
 import com.com.example.presentation.theme.PurpleGrey40
 
 @Composable
@@ -94,3 +97,40 @@ fun GroceryListItem(
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun GroceryListItemPreview() {
+    AppTheme {
+        GroceryListItem(
+            item = GroceryItemUiModel(
+                id = 1L,
+                name = "Milk",
+                category = GroceryCategory.Milk,
+                isCompleted = false,
+                createdAt = 1L
+            ),
+            onToggleCompleted = {},
+            onDelete = {},
+            onEdit = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun GroceryListItemCompletedPreview() {
+    AppTheme {
+        GroceryListItem(
+            item = GroceryItemUiModel(
+                id = 2L,
+                name = "Bread",
+                category = GroceryCategory.Breads,
+                isCompleted = true,
+                createdAt = 2L
+            ),
+            onToggleCompleted = {},
+            onDelete = {},
+            onEdit = {}
+        )
+    }
+}

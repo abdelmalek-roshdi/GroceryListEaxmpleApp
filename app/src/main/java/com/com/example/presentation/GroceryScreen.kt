@@ -13,14 +13,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.com.example.domain.model.GroceryCategory
 import com.com.example.presentation.components.AddItemCard
 import com.com.example.presentation.components.EditItemDialog
 import com.com.example.presentation.components.EmptyState
 import com.com.example.presentation.components.FiltersRow
 import com.com.example.presentation.components.GroceryListItem
+import com.com.example.presentation.model.GroceryItemUiModel
 import com.com.example.presentation.viewstate.GroceryUiState
 import com.com.example.presentation.viewmodel.GroceryEvent
+import com.com.example.presentation.theme.AppTheme
 
 @Composable
 fun GroceryScreen(
@@ -97,3 +101,36 @@ fun GroceryScreen(
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun GroceryScreenEmptyPreview() {
+    AppTheme {
+        GroceryScreen(
+            state = GroceryUiState(
+                nameInput = "",
+                selectedCategory = GroceryCategory.Milk
+            ),
+            paddingValues = PaddingValues(0.dp),
+            onEvent = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun GroceryScreenWithItemsPreview() {
+    AppTheme {
+        GroceryScreen(
+            state = GroceryUiState(
+                nameInput = "Milk",
+                selectedCategory = GroceryCategory.Milk,
+                items = listOf(
+                    GroceryItemUiModel(1L, "Milk", GroceryCategory.Milk, false, 1L),
+                    GroceryItemUiModel(2L, "Bread", GroceryCategory.Breads, true, 2L)
+                )
+            ),
+            paddingValues = PaddingValues(0.dp),
+            onEvent = {}
+        )
+    }
+}
