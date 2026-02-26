@@ -4,14 +4,15 @@ This project is a simple grocery list Android app built with **Kotlin**, **Jetpa
 
 ### Screenshots
 
-| Main screen | List with items | Filters & sort |
-|-------------|-----------------|----------------|
-| Add new item card, category chips, status/category/sort filters | Grocery list with checkboxes, category tags, edit & delete | Category filter (e.g. Vegetables) and A→Z sort applied |
+| Main screen | List with items | Filters & sort | Edit item |
+|-------------|-----------------|----------------|-----------|
+| Add new item card, category chips, status/category/sort filters | Grocery list with checkboxes, category tags, edit & delete | Category filter (e.g. Vegetables) and A→Z sort applied | Edit Item dialog: change name and category, Cancel/Save |
 
 <p align="center">
   <img src="screenshots/screenshot-main.png" width="280" alt="Add New Item and filters" />
   <img src="screenshots/screenshot-list.png" width="280" alt="Grocery list" />
   <img src="screenshots/screenshot-filters.png" width="280" alt="Category and sort filters" />
+  <img src="screenshots/screenshot-edit-dialog.png" width="280" alt="Edit Item dialog" />
 </p>
 
 ### Features
