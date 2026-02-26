@@ -5,8 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.com.example.domain.model.AddItemResult
 import com.com.example.domain.model.GroceryCategory
 import com.com.example.domain.model.GroceryItem
+import com.com.example.domain.model.ItemSortOption
+import com.com.example.domain.model.ItemStatusFilter
 import com.com.example.domain.usecase.AddGroceryItemUseCase
 import com.com.example.domain.usecase.DeleteGroceryItemUseCase
+import com.com.example.domain.usecase.FilterAndSortGroceryItemsUseCase
 import com.com.example.domain.usecase.GetGroceryItemsUseCase
 import com.com.example.domain.usecase.ToggleCompletedUseCase
 import com.com.example.domain.usecase.UpdateGroceryItemUseCase
@@ -28,7 +31,8 @@ class GroceryListViewModel @Inject constructor(
     private val addItem: AddGroceryItemUseCase,
     private val updateItem: UpdateGroceryItemUseCase,
     private val deleteItem: DeleteGroceryItemUseCase,
-    private val toggleCompleted: ToggleCompletedUseCase
+    private val toggleCompleted: ToggleCompletedUseCase,
+    private val filterAndSortItems: FilterAndSortGroceryItemsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(GroceryUiState(isLoading = true))
@@ -62,7 +66,20 @@ class GroceryListViewModel @Inject constructor(
                 getItems(),
                 _uiState
             ) { items, state ->
-                Pair(items, state.copy(isLoading = false, items = applyFiltersAndSort(items, state)))
+                val filteredAndSorted = filterAndSortItems(
+                    items = items,
+                    statusFilter = state.statusFilter.toDomainStatus(),
+                    categoryFilter = state.categoryFilter,
+                    sortOption = state.sortOption.toDomainSort()
+                )
+
+                Pair(
+                    items,
+                    state.copy(
+                        isLoading = false,
+                        items = filteredAndSorted.map { it.toUi() }
+                    )
+                )
             }.collect { (items, newState) ->
                 _latestItems.value = items
                 val current = _uiState.value
@@ -181,26 +198,6 @@ class GroceryListViewModel @Inject constructor(
         _uiState.update { it.copy(snackbarMessage = null) }
     }
 
-    private fun applyFiltersAndSort(
-        items: List<GroceryItem>,
-        state: GroceryUiState
-    ): List<GroceryItemUiModel> {
-        var filtered = items
-        when (state.statusFilter) {
-            StatusFilter.All -> Unit
-            StatusFilter.Active -> filtered = filtered.filter { !it.isCompleted }
-            StatusFilter.Completed -> filtered = filtered.filter { it.isCompleted }
-        }
-        state.categoryFilter?.let { category ->
-            filtered = filtered.filter { it.category == category }
-        }
-        val sorted = when (state.sortOption) {
-            SortOption.CreatedAt -> filtered.sortedByDescending { it.createdAt }
-            SortOption.Alphabetical -> filtered.sortedBy { it.name.lowercase() }
-        }
-        return sorted.map { it.toUi() }
-    }
-
     private fun GroceryItem.toUi(): GroceryItemUiModel =
         GroceryItemUiModel(
             id = id,
@@ -209,5 +206,18 @@ class GroceryListViewModel @Inject constructor(
             isCompleted = isCompleted,
             createdAt = createdAt
         )
+
+    private fun StatusFilter.toDomainStatus(): ItemStatusFilter =
+        when (this) {
+            StatusFilter.All -> ItemStatusFilter.All
+            StatusFilter.Active -> ItemStatusFilter.Active
+            StatusFilter.Completed -> ItemStatusFilter.Completed
+        }
+
+    private fun SortOption.toDomainSort(): ItemSortOption =
+        when (this) {
+            SortOption.CreatedAt -> ItemSortOption.CreatedAt
+            SortOption.Alphabetical -> ItemSortOption.Alphabetical
+        }
 }
 

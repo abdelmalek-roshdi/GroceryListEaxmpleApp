@@ -6,6 +6,7 @@ import com.com.example.domain.model.GroceryCategory
 import com.com.example.domain.model.GroceryItem
 import com.com.example.domain.usecase.AddGroceryItemUseCase
 import com.com.example.domain.usecase.DeleteGroceryItemUseCase
+import com.com.example.domain.usecase.FilterAndSortGroceryItemsUseCase
 import com.com.example.domain.usecase.GetGroceryItemsUseCase
 import com.com.example.domain.usecase.ToggleCompletedUseCase
 import com.com.example.domain.usecase.UpdateGroceryItemUseCase
@@ -51,6 +52,7 @@ class GroceryListViewModelTest {
         val updateUseCase = mockk<UpdateGroceryItemUseCase>(relaxed = true)
         val deleteUseCase = mockk<DeleteGroceryItemUseCase>(relaxed = true)
         val toggleUseCase = mockk<ToggleCompletedUseCase>(relaxed = true)
+        val filterAndSortUseCase = FilterAndSortGroceryItemsUseCase()
 
         every { getItems.invoke() } returns itemsFlow
         coEvery { addUseCase.invoke(any(), any()) } returns AddItemResult.Success
@@ -60,7 +62,8 @@ class GroceryListViewModelTest {
             addItem = addUseCase,
             updateItem = updateUseCase,
             deleteItem = deleteUseCase,
-            toggleCompleted = toggleUseCase
+            toggleCompleted = toggleUseCase,
+            filterAndSortItems = filterAndSortUseCase
         )
 
         viewModel.uiState.test {
@@ -88,6 +91,7 @@ class GroceryListViewModelTest {
         val updateUseCase = mockk<UpdateGroceryItemUseCase>(relaxed = true)
         val deleteUseCase = mockk<DeleteGroceryItemUseCase>(relaxed = true)
         val toggleUseCase = mockk<ToggleCompletedUseCase>(relaxed = true)
+        val filterAndSortUseCase = FilterAndSortGroceryItemsUseCase()
 
         every { getItems.invoke() } returns itemsFlow
         coEvery { addUseCase.invoke(any(), any()) } returns
@@ -98,7 +102,8 @@ class GroceryListViewModelTest {
             addItem = addUseCase,
             updateItem = updateUseCase,
             deleteItem = deleteUseCase,
-            toggleCompleted = toggleUseCase
+            toggleCompleted = toggleUseCase,
+            filterAndSortItems = filterAndSortUseCase
         )
 
         viewModel.uiState.test {
@@ -130,6 +135,7 @@ class GroceryListViewModelTest {
         val updateUseCase = mockk<UpdateGroceryItemUseCase>(relaxed = true)
         val deleteUseCase = mockk<DeleteGroceryItemUseCase>(relaxed = true)
         val toggleUseCase = mockk<ToggleCompletedUseCase>(relaxed = true)
+        val filterAndSortUseCase = FilterAndSortGroceryItemsUseCase()
 
         every { getItems.invoke() } returns itemsFlow
 
@@ -138,7 +144,8 @@ class GroceryListViewModelTest {
             addItem = addUseCase,
             updateItem = updateUseCase,
             deleteItem = deleteUseCase,
-            toggleCompleted = toggleUseCase
+            toggleCompleted = toggleUseCase,
+            filterAndSortItems = filterAndSortUseCase
         )
 
         viewModel.uiState.test {
@@ -175,6 +182,7 @@ class GroceryListViewModelTest {
         val updateUseCase = mockk<UpdateGroceryItemUseCase>(relaxed = true)
         val deleteUseCase = mockk<DeleteGroceryItemUseCase>(relaxed = true)
         val toggleUseCase = mockk<ToggleCompletedUseCase>(relaxed = true)
+        val filterAndSortUseCase = FilterAndSortGroceryItemsUseCase()
 
         every { getItems.invoke() } returns itemsFlow
 
@@ -183,7 +191,8 @@ class GroceryListViewModelTest {
             addItem = addUseCase,
             updateItem = updateUseCase,
             deleteItem = deleteUseCase,
-            toggleCompleted = toggleUseCase
+            toggleCompleted = toggleUseCase,
+            filterAndSortItems = filterAndSortUseCase
         )
 
         viewModel.uiState.test {
@@ -212,6 +221,7 @@ class GroceryListViewModelTest {
         val updateUseCase = mockk<UpdateGroceryItemUseCase>(relaxed = true)
         val deleteUseCase = mockk<DeleteGroceryItemUseCase>(relaxed = true)
         val toggleUseCase = mockk<ToggleCompletedUseCase>(relaxed = true)
+        val filterAndSortUseCase = FilterAndSortGroceryItemsUseCase()
 
         every { getItems.invoke() } returns itemsFlow
 
@@ -220,7 +230,8 @@ class GroceryListViewModelTest {
             addItem = addUseCase,
             updateItem = updateUseCase,
             deleteItem = deleteUseCase,
-            toggleCompleted = toggleUseCase
+            toggleCompleted = toggleUseCase,
+            filterAndSortItems = filterAndSortUseCase
         )
 
         viewModel.uiState.test {
@@ -250,6 +261,7 @@ class GroceryListViewModelTest {
         val updateUseCase = mockk<UpdateGroceryItemUseCase>()
         val deleteUseCase = mockk<DeleteGroceryItemUseCase>(relaxed = true)
         val toggleUseCase = mockk<ToggleCompletedUseCase>(relaxed = true)
+        val filterAndSortUseCase = FilterAndSortGroceryItemsUseCase()
 
         every { getItems.invoke() } returns itemsFlow
         coEvery { updateUseCase.invoke(any()) } returns Result.success(Unit)
@@ -259,7 +271,8 @@ class GroceryListViewModelTest {
             addItem = addUseCase,
             updateItem = updateUseCase,
             deleteItem = deleteUseCase,
-            toggleCompleted = toggleUseCase
+            toggleCompleted = toggleUseCase,
+            filterAndSortItems = filterAndSortUseCase
         )
 
         viewModel.uiState.test {
@@ -305,6 +318,7 @@ class GroceryListViewModelTest {
         val updateUseCase = mockk<UpdateGroceryItemUseCase>(relaxed = true)
         val deleteUseCase = mockk<DeleteGroceryItemUseCase>(relaxed = true)
         val toggleUseCase = mockk<ToggleCompletedUseCase>()
+        val filterAndSortUseCase = FilterAndSortGroceryItemsUseCase()
 
         every { getItems.invoke() } returns itemsFlow
         coEvery { toggleUseCase.invoke(any()) } returns Result.success(Unit)
@@ -314,7 +328,8 @@ class GroceryListViewModelTest {
             addItem = addUseCase,
             updateItem = updateUseCase,
             deleteItem = deleteUseCase,
-            toggleCompleted = toggleUseCase
+            toggleCompleted = toggleUseCase,
+            filterAndSortItems = filterAndSortUseCase
         )
 
         // drain initial emissions so ViewModel has collected items and latestItems stateIn is updated
