@@ -16,7 +16,7 @@ class AddGroceryItemUseCase @Inject constructor(
     ): AddItemResult {
         val trimmed = name.trim()
         if (trimmed.isEmpty()) {
-            return AddItemResult.ValidationError("Item name cannot be empty.")
+            return AddItemResult.ValidationError(AddItemResult.ERROR_EMPTY_NAME)
         }
         val item = GroceryItem(
             id = System.currentTimeMillis(),

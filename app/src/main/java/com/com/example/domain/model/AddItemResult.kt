@@ -4,4 +4,8 @@ sealed class AddItemResult {
     object Success : AddItemResult()
     data class ValidationError(val message: String) : AddItemResult()
     data class Failure(val throwable: Throwable) : AddItemResult()
+
+    companion object {
+        const val ERROR_EMPTY_NAME = "Item name cannot be empty."
+    }
 }
