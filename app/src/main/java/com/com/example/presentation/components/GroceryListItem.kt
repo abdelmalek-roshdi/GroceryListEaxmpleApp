@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -34,14 +36,14 @@ import com.com.example.presentation.theme.AppTheme
 import com.com.example.presentation.theme.PurpleGrey40
 
 @Composable
-fun GroceryListItem(
+fun LazyItemScope.GroceryListItem(
     item: GroceryItemUiModel,
     onToggleCompleted: () -> Unit,
     onDelete: () -> Unit,
     onEdit: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().animateItem(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
@@ -101,18 +103,22 @@ fun GroceryListItem(
 @Composable
 private fun GroceryListItemPreview() {
     AppTheme {
-        GroceryListItem(
-            item = GroceryItemUiModel(
-                id = 1L,
-                name = "Milk",
-                category = GroceryCategory.Milk,
-                isCompleted = false,
-                createdAt = 1L
-            ),
-            onToggleCompleted = {},
-            onDelete = {},
-            onEdit = {}
-        )
+        LazyColumn {
+            item {
+                GroceryListItem(
+                    item = GroceryItemUiModel(
+                        id = 1L,
+                        name = "Milk",
+                        category = GroceryCategory.Milk,
+                        isCompleted = false,
+                        createdAt = 1L
+                    ),
+                    onToggleCompleted = {},
+                    onDelete = {},
+                    onEdit = {}
+                )
+            }
+        }
     }
 }
 
@@ -120,17 +126,21 @@ private fun GroceryListItemPreview() {
 @Composable
 private fun GroceryListItemCompletedPreview() {
     AppTheme {
-        GroceryListItem(
-            item = GroceryItemUiModel(
-                id = 2L,
-                name = "Bread",
-                category = GroceryCategory.Breads,
-                isCompleted = true,
-                createdAt = 2L
-            ),
-            onToggleCompleted = {},
-            onDelete = {},
-            onEdit = {}
-        )
+        LazyColumn {
+            item {
+                GroceryListItem(
+                    item = GroceryItemUiModel(
+                        id = 2L,
+                        name = "Bread",
+                        category = GroceryCategory.Breads,
+                        isCompleted = true,
+                        createdAt = 2L
+                    ),
+                    onToggleCompleted = {},
+                    onDelete = {},
+                    onEdit = {}
+                )
+            }
+        }
     }
 }

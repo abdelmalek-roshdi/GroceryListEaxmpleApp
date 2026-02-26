@@ -1,5 +1,6 @@
 package com.com.example.presentation
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -34,6 +35,7 @@ fun GroceryScreen(
 ) {
     Column(
         modifier = Modifier
+            .animateContentSize()
             .fillMaxSize()
             .padding(paddingValues)
     ) {
@@ -87,7 +89,7 @@ fun GroceryScreen(
         }
     }
 
-    state.editingItem?.let { editing ->
+    state.editingItem?.let {
         EditItemDialog(
             name = state.nameInput,
             selectedCategory = state.selectedCategory,
