@@ -14,8 +14,8 @@ class GroceryRepositoryImpl(
 ) : GroceryRepository {
 
     override fun getItems(): Flow<List<GroceryItem>> =
-        dao.observeItems().map { list ->
-            list.map { it.toDomain() }
+        dao.observeItems().map { groceries ->
+            groceries.map { it.toDomain() }
         }
 
     override suspend fun addItem(item: GroceryItem) {
