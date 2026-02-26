@@ -45,7 +45,6 @@ class GroceryListViewModelTest {
 
     @Test
     fun addItemClearsInputAndShowsSnackbar() = runTest {
-        // Given: a ViewModel with empty list and an Add use case that succeeds
         val itemsFlow = MutableStateFlow<List<GroceryItem>>(emptyList())
         val getItems = mockk<GetGroceryItemsUseCase>()
         val addUseCase = mockk<AddGroceryItemUseCase>()
@@ -68,7 +67,6 @@ class GroceryListViewModelTest {
             awaitItem() // initial loading state
             awaitItem() // state after initial items collection
 
-            // When: user types a name and taps Add
             viewModel.onNameChanged("Milk")
             val afterName = awaitItem()
             Assert.assertEquals("Milk", afterName.nameInput)
@@ -76,7 +74,6 @@ class GroceryListViewModelTest {
             viewModel.onAddItemClicked()
             advanceUntilIdle()
 
-            // Then: input is cleared and success snackbar is shown
             val afterAdd = awaitItem()
             Assert.assertEquals("", afterAdd.nameInput)
             Assert.assertEquals("Item added", afterAdd.snackbarMessage)
@@ -85,7 +82,6 @@ class GroceryListViewModelTest {
 
     @Test
     fun addItemValidationErrorShowsErrorSnackbarAndKeepsInput() = runTest {
-        // Given: a ViewModel and an Add use case that returns a validation error
         val itemsFlow = MutableStateFlow<List<GroceryItem>>(emptyList())
         val getItems = mockk<GetGroceryItemsUseCase>()
         val addUseCase = mockk<AddGroceryItemUseCase>()
@@ -109,7 +105,6 @@ class GroceryListViewModelTest {
             awaitItem() // initial
             awaitItem() // after items collection
 
-            // When: user enters whitespace-only text and taps Add
             viewModel.onNameChanged("   ")
             val afterName = awaitItem()
             Assert.assertEquals("   ", afterName.nameInput)
@@ -117,7 +112,6 @@ class GroceryListViewModelTest {
             viewModel.onAddItemClicked()
             advanceUntilIdle()
 
-            // Then: input remains and error snackbar is shown
             val afterAdd = awaitItem()
             Assert.assertEquals("   ", afterAdd.nameInput)
             Assert.assertEquals("Item name cannot be empty.", afterAdd.snackbarMessage)
@@ -126,7 +120,6 @@ class GroceryListViewModelTest {
 
     @Test
     fun filtersAndSortingAppliedToItems() = runTest {
-        // Given: a ViewModel with two fruit items in the repository
         val items = listOf(
             GroceryItem(1, "Bananas", GroceryCategory.Fruits, false, 1),
             GroceryItem(2, "Apples", GroceryCategory.Fruits, false, 2)
@@ -156,11 +149,9 @@ class GroceryListViewModelTest {
                 listOf("Apples", "Bananas"),
                 initialAfterCollect.items.map { it.name })
 
-            // When: user changes sorting to Alphabetical
             viewModel.onSortOptionSelected(SortOption.Alphabetical)
             advanceUntilIdle()
 
-            // Then: items remain in correct alphabetical order
             val afterSort = awaitItem()
             Assert.assertEquals(listOf("Apples", "Bananas"), afterSort.items.map { it.name })
         }
@@ -168,7 +159,6 @@ class GroceryListViewModelTest {
 
     @Test
     fun statusFilterCompletedShowsOnlyCompletedItems() = runTest {
-        // Given: a ViewModel with one completed and one active item
         val items = listOf(
             GroceryItem(1, "Milk", GroceryCategory.Milk, isCompleted = true, createdAt = 1),
             GroceryItem(
@@ -201,11 +191,9 @@ class GroceryListViewModelTest {
             val initial = awaitItem()
             Assert.assertEquals(2, initial.items.size)
 
-            // When: user selects the Completed status filter
             viewModel.onStatusFilterSelected(StatusFilter.Completed)
             advanceUntilIdle()
             awaitItem() // consume filter-only update; combine will emit filtered list next
-            // Then: only completed items are visible
             val completedState = awaitItem()
             Assert.assertEquals(listOf("Milk"), completedState.items.map { it.name })
         }
@@ -213,7 +201,6 @@ class GroceryListViewModelTest {
 
     @Test
     fun categoryFilterFruitsShowsOnlyFruitItems() = runTest {
-        // Given: a ViewModel with milk and fruit items
         val items = listOf(
             GroceryItem(1, "Milk", GroceryCategory.Milk, isCompleted = false, createdAt = 1),
             GroceryItem(2, "Bananas", GroceryCategory.Fruits, isCompleted = false, createdAt = 2),
@@ -240,20 +227,16 @@ class GroceryListViewModelTest {
             awaitItem() // initial
             awaitItem() // after items collection
 
-            // When: user filters by the Fruits category
             viewModel.onCategoryFilterSelected(GroceryCategory.Fruits)
             advanceUntilIdle()
             awaitItem() // consume filter-only update; combine will emit filtered list next
             val fruitsState = awaitItem()
-            // Default sort is by createdAt desc: Apples (3) then Bananas (2)
-            // Then: only fruit items are shown in newest-first order
             Assert.assertEquals(listOf("Apples", "Bananas"), fruitsState.items.map { it.name })
         }
     }
 
     @Test
     fun editItemFlowUpdatesViaUseCaseAndShowsSnackbar() = runTest {
-        // Given: a ViewModel with a single item and an Update use case that succeeds
         val item = GroceryItem(
             id = 1,
             name = "Milk",
@@ -283,7 +266,6 @@ class GroceryListViewModelTest {
             awaitItem() // initial
             awaitItem() // after items collection
 
-            // When: user opens edit, changes the name and saves
             viewModel.onEditItemRequested(item.id)
             val editingState = awaitItem()
             Assert.assertNotNull(editingState.editingItem)
@@ -292,7 +274,6 @@ class GroceryListViewModelTest {
             viewModel.onEditConfirmed("Skimmed Milk", GroceryCategory.Milk)
             advanceUntilIdle()
 
-            // Then: dialog closes and success snackbar is shown
             val afterEdit = awaitItem()
             Assert.assertNull(afterEdit.editingItem)
             Assert.assertEquals("Item updated", afterEdit.snackbarMessage)
@@ -311,7 +292,6 @@ class GroceryListViewModelTest {
 
     @Test
     fun toggleCompletedInvokesUseCaseWithCorrectItem() = runTest {
-        // Given: a ViewModel with a single incomplete item
         val item = GroceryItem(
             id = 10,
             name = "Bread",
@@ -343,14 +323,11 @@ class GroceryListViewModelTest {
             awaitItem()
             advanceUntilIdle()
 
-            // When: user toggles completion for that item
             viewModel.onToggleCompletedClicked(item.id)
             advanceUntilIdle()
-            // consume snackbar emission so Turbine does not see unconsumed events
             awaitItem()
         }
 
-        // Then: the ToggleCompleted use case is called with that item
         coVerify {
             toggleUseCase.invoke(
                 withArg { toggled ->

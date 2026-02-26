@@ -17,10 +17,7 @@ import org.junit.Assert.*
 class ExampleInstrumentedTest {
     @Test
     fun useAppContext() {
-        // Given: the instrumentation target context
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        // When: reading the application package name
-        // Then: it matches the expected id
         assertEquals("com.example", appContext.packageName)
     }
 }
